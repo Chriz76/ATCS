@@ -725,8 +725,9 @@ public class DialogueEditor extends JSONElementEditor {
 			case random:
 				requirementObj = null;
 				requirementObjId = null;
-				requirementValue = addIntegerField(pane, "Chance: ", requirement.required_value, false, writable, listener);
-				break;
+				requirementValue = addDoubleField(pane, "Chance: ", 
+						(requirement.required_value == null ? 0d : ((double)requirement.required_value)/10000d), writable, listener);
+				break;				
 			case hasActorCondition:
 				requirementObj = addActorConditionBox(pane, project, "Actor Condition: ", (ActorCondition) requirement.required_obj, writable, listener);
 				requirementObjId = null;
@@ -1347,7 +1348,16 @@ public class DialogueEditor extends JSONElementEditor {
 						if (stage != null) stage.removeBacklink(dialogue);
 					}
 				}
-				selectedRequirement.required_value = (Integer) value;
+				if (value != null && value instanceof Double)
+				{
+					selectedRequirement.required_value = (int)(((Double) value) * 10000d);
+				}
+				else
+				{
+					selectedRequirement.required_value = (Integer) value;
+				}
+					
+				
 				if (quest != null) {
 					stage = quest.getStage(selectedRequirement.required_value);
 					if (stage != null) stage.addBacklink(dialogue);

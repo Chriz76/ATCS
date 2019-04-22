@@ -105,10 +105,20 @@ public class Requirement extends JSONElement {
 	
 	@Override
 	public String getDesc() {
+		String value = "";
+		if (type == RequirementType.random && required_value != null)
+			{
+			value= (((double)required_value) / 10000d) + "%";
+			}
+		else
+		{
+			value = (required_value == null ? "" : required_value.toString());
+		}
+			
 		return ((negated != null && negated) ? "NOT " : "")
 				+(type == null ? "" : type.toString()+":")
 				+(required_obj_id == null ? "" : required_obj_id+":")
-				+(required_value == null ? "" : required_value.toString());
+				+(value);
 	}
 
 	@Override
